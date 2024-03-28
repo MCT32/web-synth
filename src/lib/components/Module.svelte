@@ -15,6 +15,10 @@
         flex-flow: column;
         align-items: center;
         gap: 10px;
+        margin-left: 25px;
+        margin-right: 25px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     h2 {

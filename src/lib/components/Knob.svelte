@@ -75,6 +75,7 @@
         height: var(--diameter);
         border-radius: 50%;
         background-color: #facc15;
+        margin: auto;
 
         transform: rotate(calc(var(--rotation) * 1rad));
     }

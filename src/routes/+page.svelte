@@ -4,18 +4,22 @@
 
     import Frame from '$lib/components/Frame.svelte';
     import Oscillator from '$lib/components/Oscillator.svelte';
-    import Knob from '$lib/components/Knob.svelte';
+    import Divider from '$lib/components/Divider.svelte';
+    import Envelope from '$lib/components/Envelope.svelte';
 
 
     let osc: Oscillator;
+    let env: Envelope;
+
+    let currentKey = "";
 
     function onMIDIMessage(event: Event) {
         if (((event as MIDIMessageEvent).data[0] & 0b11110000) == 0b10010000) {
-            osc.osc.triggerAttack(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toFrequency());
+            play(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toNote());
         }
 
         if (((event as MIDIMessageEvent).data[0] & 0b11110000) == 0b10000000) {
-            osc.osc.triggerRelease(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toFrequency());
+            stop(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toNote());
         }
     }
 
@@ -59,20 +63,36 @@
 
     function onKeyDown(ev: KeyboardEvent) {
         if (!ev.repeat) {
-            osc.osc?.triggerAttack(Tone.Frequency(keyboardToNote(ev.key)));
+            play(keyboardToNote(ev.key));
         }
     }
 
     function onKeyUp(ev: KeyboardEvent) {
-        osc.osc?.triggerRelease(Tone.Frequency(keyboardToNote(ev.key)));
+        stop(keyboardToNote(ev.key));
+    }
+
+    function play(note: string) {
+        currentKey = note;
+        osc.osc.set({
+            frequency: new Tone.Frequency(note)
+        });
+        env.env.triggerAttack();
+    }
+
+    function stop(note: string) {
+        if (currentKey == note) {
+            env.env.triggerRelease();
+        }
     }
 
     function start() {
         osc.start();
+        env.start();
 
-        osc.osc.toDestination();
+        osc.osc.connect(env.env);
+        env.env.toDestination();
 
-        console.log(osc.osc.get())
+        console.log(osc.osc)
     }
 </script>
 
@@ -81,6 +101,8 @@
 
 <Frame>
     <Oscillator bind:this={osc} />
+    <Divider />
+    <Envelope bind:this={env} />
 </Frame>
 
 

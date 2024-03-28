@@ -17,7 +17,7 @@
     ]
 
 
-    export let osc: Tone.PolySynth = undefined;
+    export let osc: Tone.OmniOscillator = undefined;
 
     let form: number;
     let pw: number;
@@ -25,26 +25,24 @@
 
 
     export function start() {
-        osc = new Tone.PolySynth(Tone.Synth, {
-            oscillator: {
-                type: "sawtooth"
-            }
+        osc = new Tone.OmniOscillator({
+            type: "sawtooth"
         });
+
+        osc.volume.value = -6;
+
+        osc.start();
     }
 
     function onChangeForm() {
         osc.set({
-            oscillator: {
-                type: forms[form]
-            }
+            type: forms[form]
         });
     }
 
     function onChangePW() {
         osc.set({
-            oscillator: {
-                width: pw
-            }
+            width: pw
         });
     }
 

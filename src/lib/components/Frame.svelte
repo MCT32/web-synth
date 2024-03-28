@@ -5,6 +5,10 @@
 
 <style>
     .frame {
+        display: flex;
+        align-items: stretch;
+        flex-flow: row;
+        gap: 10px;
         width: fit-content;
         height: fit-content;
         background-color: #1c1917;
