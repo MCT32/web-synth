@@ -9,15 +9,46 @@
     import SmallKnob from "./SmallKnob.svelte";
 
 
+    const forms: Array<string> = [
+        "sine",
+        "triangle",
+        "sawtooth",
+        "pulse",
+    ]
+
+
     export let osc: Tone.PolySynth = undefined;
+
+    let form: number;
+    let pw: number;
     let detune: number;
 
 
     export function start() {
-        osc = new Tone.PolySynth();
+        osc = new Tone.PolySynth(Tone.Synth, {
+            oscillator: {
+                type: "sawtooth"
+            }
+        });
     }
 
-    function onChange() {
+    function onChangeForm() {
+        osc.set({
+            oscillator: {
+                type: forms[form]
+            }
+        });
+    }
+
+    function onChangePW() {
+        osc.set({
+            oscillator: {
+                width: pw
+            }
+        });
+    }
+
+    function onChangeDetune() {
         osc.set({
             detune: detune
         });
@@ -26,7 +57,7 @@
 
 
 <Module name="Oscillator">
-    <LargeKnob label="Freq" min={-1200} max={1200} defaultValue={0} bind:value={detune} on:change={onChange} />
-    <SmallKnob label="Form" />
-    <SmallKnob label="PW" />
+    <LargeKnob label="Form" min={0} max={3} defaultValue={2} round={true} bind:value={form} on:change={onChangeForm} />
+    <SmallKnob label="PW" min={-1} max={1} defaultValue={0} bind:value={pw} on:change={onChangePW} />
+    <SmallKnob label="Detune" min={-1200} max={1200} defaultValue={0} bind:value={detune} on:change={onChangeDetune} />
 </Module>

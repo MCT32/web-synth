@@ -7,7 +7,8 @@
     export let min: number = 0;
     export let max: number = 100;
     export let defaultValue: number = 50;
-    export let value: number;
+    export let value: number = defaultValue;
+    export let round: boolean = false;
 
 
     const dispatch = createEventDispatcher();
@@ -21,7 +22,7 @@
 <div class="container">
     <span class="label">{label}</span>
 
-    <Knob min={min} max={max} defaultValue={defaultValue} bind:value={value} on:change={onChange} />
+    <Knob min={min} max={max} defaultValue={defaultValue} bind:value={value} bind:round={round} on:change={onChange} />
 </div>
 
 

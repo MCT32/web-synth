@@ -6,6 +6,7 @@
     export let value = defaultValue;
     export let min = 0;
     export let max = 100;
+    export let round: boolean = false;
 
     export let diameter: number = 100;
 
@@ -30,7 +31,10 @@
         const { clientY } = event;
 
         const valueDiff = valueRange * (clientY - startY) / pixelRange;
-        value = clamp(startValue - valueDiff, min, max)
+        value = clamp(startValue - valueDiff, min, max);
+        if (round) {
+            value = Math.round(value);
+        }
 
         dispatch('change');
     }
