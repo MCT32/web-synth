@@ -6,10 +6,14 @@
     import Oscillator from '$lib/components/Oscillator.svelte';
     import Divider from '$lib/components/Divider.svelte';
     import Envelope from '$lib/components/Envelope.svelte';
+    import Filter from '$lib/components/Filter.svelte';
+    import FilterEnvelope from '$lib/components/FilterEnvelope.svelte';
 
 
     let osc: Oscillator;
     let env: Envelope;
+    let filter_env: FilterEnvelope;
+    let filter: Filter;
 
     let currentKey = "";
 
@@ -77,20 +81,26 @@
             frequency: new Tone.Frequency(note)
         });
         env.env.triggerAttack();
+        filter_env.env.triggerAttack();
     }
 
     function stop(note: string) {
         if (currentKey == note) {
             env.env.triggerRelease();
+            filter_env.env.triggerRelease();
         }
     }
 
     function start() {
         osc.start();
         env.start();
+        filter_env.start();
+        filter.start();
 
         osc.osc.connect(env.env);
-        env.env.toDestination();
+        env.env.connect(filter.filter);
+        filter_env.env.connect(filter.env_cv);
+        filter.filter.toDestination();
 
         console.log(osc.osc)
     }
@@ -103,6 +113,10 @@
     <Oscillator bind:this={osc} />
     <Divider />
     <Envelope bind:this={env} />
+    <Divider />
+    <Filter bind:this={filter} />
+    <Divider />
+    <FilterEnvelope bind:this={filter_env} />
 </Frame>
 
 

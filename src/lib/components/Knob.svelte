@@ -76,6 +76,8 @@
         border-radius: 50%;
         background-color: #facc15;
         margin: auto;
+        margin-left: 25px;
+        margin-right: 25px;
 
         transform: rotate(calc(var(--rotation) * 1rad));
     }
