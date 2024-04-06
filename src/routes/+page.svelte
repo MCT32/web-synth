@@ -16,6 +16,7 @@
     let filter: Filter;
 
     let currentKey = "";
+    let keyboardOctave = 4;
 
     function onMIDIMessage(event: Event) {
         if (((event as MIDIMessageEvent).data[0] & 0b11110000) == 0b10010000) {
@@ -58,8 +59,16 @@
 
         const note = keys[key];
 
+        if (key == "x") {
+            keyboardOctave++
+        }
+
+        if (key == "z") {
+            keyboardOctave--
+        }
+
         if (note != undefined) {
-            return note + "4";
+            return note + keyboardOctave;
         } else {
             return undefined;
         }
