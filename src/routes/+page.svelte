@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { SvelteComponent, onMount } from 'svelte';
     import * as Tone from 'tone';
 
     import Frame from '$lib/components/Frame.svelte';
@@ -19,12 +19,16 @@
     let keyboardOctave = 4;
 
     function onMIDIMessage(event: Event) {
-        if (((event as MIDIMessageEvent).data[0] & 0b11110000) == 0b10010000) {
-            play(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toNote());
+        const midi_event = event as MIDIMessageEvent;
+
+        if (midi_event.data == null) return;
+
+        if ((midi_event.data[0] & 0b11110000) == 0b10010000) {
+            play(Tone.Frequency(midi_event.data[1], 'midi').toNote());
         }
 
-        if (((event as MIDIMessageEvent).data[0] & 0b11110000) == 0b10000000) {
-            stop(Tone.Frequency((event as MIDIMessageEvent).data[1], 'midi').toNote());
+        if ((midi_event.data[0] & 0b11110000) == 0b10000000) {
+            stop(Tone.Frequency(midi_event.data[1], 'midi').toNote());
         }
     }
 
@@ -42,7 +46,7 @@
     });
 
     function keyboardToNote(key: string) {
-        const keys = {
+        const keys: {[index: string]: string} = {
             "a": "C",
             "w": "C#",
             "s": "D",
@@ -68,7 +72,9 @@
 
     function onKeyDown(ev: KeyboardEvent) {
         if (!ev.repeat) {
-            play(keyboardToNote(ev.key));
+            const note = keyboardToNote(ev.key);
+
+            if (note) play(note);
         }
 
         if (ev.key == "x") {
@@ -81,20 +87,25 @@
     }
 
     function onKeyUp(ev: KeyboardEvent) {
-        stop(keyboardToNote(ev.key));
+        const note = keyboardToNote(ev.key);
+
+        if (note) stop(note);
     }
 
     function play(note: string) {
         currentKey = note;
-        osc.osc.set({
-            frequency: new Tone.Frequency(note)
-        });
-        env.env.triggerAttack();
-        filter_env.env.triggerAttack();
+
+        if (osc.osc && env.env && filter_env.env) {
+            osc.osc.set({
+                frequency: Tone.Frequency(note).toFrequency()
+            });
+            env.env.triggerAttack();
+            filter_env.env.triggerAttack();
+        }
     }
 
     function stop(note: string) {
-        if (currentKey == note) {
+        if (env.env && filter_env.env && currentKey == note) {
             env.env.triggerRelease();
             filter_env.env.triggerRelease();
         }
@@ -105,6 +116,8 @@
         env.start();
         filter_env.start();
         filter.start();
+
+        if (!osc.osc || !env.env || !filter.filter || !filter.env_cv || !filter_env.env) return;
 
         osc.osc.connect(env.env);
         env.env.connect(filter.filter);

@@ -9,16 +9,16 @@
     import SmallKnob from "./SmallKnob.svelte";
 
 
-    const types = [
+    const types: BiquadFilterType[] = [
         "lowpass",
         "bandpass",
         "highpass"
     ]
 
 
-    export let filter: Tone.Filter;
+    export let filter: Tone.Filter | undefined = undefined;
     let detune_adder: Tone.Add;
-    export let env_cv: Tone.Scale;
+    export let env_cv: Tone.Scale | undefined = undefined;
 
     let detune: number;
     let type: number;
@@ -31,12 +31,16 @@
     }
 
     function onChangeType() {
+        if (!filter) return;
+
         filter.set({
             type: types[type]
         })
     }
 
     function onChangeEnvAmt() {
+        if (!env_cv) return;
+
         env_cv.set({
             max: env_amt
         })
@@ -59,12 +63,3 @@
     <SmallKnob label="Type" min={0} max={2} defaultValue={0} round={true} bind:value={type} on:change={onChangeType} />
     <SmallKnob label="Env Amt" min={0} max={4800} defaultValue={2400} bind:value={env_amt} on:change={onChangeEnvAmt} />
 </Module>
-
-
-<style>
-    .horizontal {
-        display: flex;
-        flex-flow: row;
-        gap: 10px;
-    }
-</style>

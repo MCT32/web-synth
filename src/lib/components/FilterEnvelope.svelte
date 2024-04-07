@@ -9,7 +9,7 @@
     import SmallKnob from "./SmallKnob.svelte";
 
 
-    export let env: Tone.Envelope;
+    export let env: Tone.Envelope | undefined = undefined;
 
 
     let attack: number = 0.1;
@@ -18,24 +18,32 @@
     let release: number = 0.8;
 
     function onChangeAttack() {
+        if (!env) return;
+
         env.set({
             attack: attack
         })
     }
 
     function onChangeDecay() {
+        if (!env) return;
+
         env.set({
             decay: decay
         })
     }
 
     function onChangeSustain() {
+        if (!env) return;
+
         env.set({
             sustain: sustain
         })
     }
 
     function onChangeRelease() {
+        if (!env) return;
+
         env.set({
             release: release
         })

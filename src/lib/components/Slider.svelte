@@ -15,12 +15,15 @@
         dispatch('change');
         console.log("afsadf");
     }
+
+
+    const notypecheck = (x:any)=>x;
 </script>
 
 
 <div class="container">
     <span class="label">{label}</span>
-    <input class="slider" type="range" orient="vertical" min={min} max={max} step={step} bind:value={value} on:input={onChange}>
+    <input class="slider" type="range" {...notypecheck({orient: "vertical"})} min={min} max={max} step={step} bind:value={value} on:input={onChange}>
 </div>
 
 

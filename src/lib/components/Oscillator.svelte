@@ -9,7 +9,7 @@
     import SmallKnob from "./SmallKnob.svelte";
 
 
-    const forms: Array<string> = [
+    const forms: Array<"sine" | "triangle" | "sawtooth" | "pulse"> = [
         "sine",
         "triangle",
         "sawtooth",
@@ -17,7 +17,7 @@
     ]
 
 
-    export let osc: Tone.OmniOscillator = undefined;
+    export let osc: Tone.OmniOscillator<any> | undefined = undefined;
 
     let form: number;
     let pw: number;
@@ -35,18 +35,24 @@
     }
 
     function onChangeForm() {
+        if (!osc) return;
+
         osc.set({
             type: forms[form]
         });
     }
 
     function onChangePW() {
+        if (!osc) return;
+
         osc.set({
             width: pw
         });
     }
 
     function onChangeDetune() {
+        if (!osc) return;
+
         osc.set({
             detune: detune
         });
