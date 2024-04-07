@@ -59,14 +59,6 @@
 
         const note = keys[key];
 
-        if (key == "x") {
-            keyboardOctave++
-        }
-
-        if (key == "z") {
-            keyboardOctave--
-        }
-
         if (note != undefined) {
             return note + keyboardOctave;
         } else {
@@ -77,6 +69,14 @@
     function onKeyDown(ev: KeyboardEvent) {
         if (!ev.repeat) {
             play(keyboardToNote(ev.key));
+        }
+
+        if (ev.key == "x") {
+            keyboardOctave++;
+        }
+
+        if (ev.key == "z") {
+            keyboardOctave--;
         }
     }
 
