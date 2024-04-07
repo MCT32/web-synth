@@ -12,10 +12,10 @@
     export let env: Tone.Envelope | undefined = undefined;
 
 
-    let attack: number = 0.1;
-    let decay: number = 0.2;
-    let sustain: number = 1.0;
-    let release: number = 0.8;
+    let attack: number = 0.0;
+    let decay: number = 0.3;
+    let sustain: number = 0.0;
+    let release: number = 0.3;
 
     function onChangeAttack() {
         if (!env) return;
@@ -52,10 +52,10 @@
 
     export function start() {
         env = new Tone.Envelope({
-            attack: 0.1,
-            decay: 0.2,
-            sustain: 1.0,
-            release: 0.8,
+            attack: attack,
+            decay: decay,
+            sustain: sustain,
+            release: release,
             attackCurve: "linear",
             decayCurve: "linear",
             releaseCurve: "linear",

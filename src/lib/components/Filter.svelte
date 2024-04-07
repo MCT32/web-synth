@@ -50,7 +50,7 @@
     export function start() {
         filter = new Tone.Filter(Tone.Frequency("C4").toFrequency(), "lowpass");
         detune_adder = new Tone.Add().connect(filter.detune);
-        env_cv = new Tone.Scale(0, 2400).connect(detune_adder);
+        env_cv = new Tone.Scale(0, 4800).connect(detune_adder);
         detune_adder.addend.set({
             value: detune
         })
@@ -59,7 +59,7 @@
 
 
 <Module name="Filter">
-    <LargeKnob label="Cutoff" min={-4800} max={4800} defaultValue={2400} bind:value={detune} on:change={onChangeDetune} />
+    <LargeKnob label="Cutoff" min={-4800} max={4800} defaultValue={-2400} bind:value={detune} on:change={onChangeDetune} />
     <SmallKnob label="Type" min={0} max={2} defaultValue={0} round={true} bind:value={type} on:change={onChangeType} />
-    <SmallKnob label="Env Amt" min={0} max={4800} defaultValue={2400} bind:value={env_amt} on:change={onChangeEnvAmt} />
+    <SmallKnob label="Env Amt" min={0} max={9600} defaultValue={4800} bind:value={env_amt} on:change={onChangeEnvAmt} />
 </Module>

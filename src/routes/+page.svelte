@@ -16,7 +16,7 @@
     let filter: Filter;
 
     let currentKey = "";
-    let keyboardOctave = 4;
+    let keyboardOctave = 2;
 
     function onMIDIMessage(event: Event) {
         const midi_event = event as MIDIMessageEvent;
