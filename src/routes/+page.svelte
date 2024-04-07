@@ -18,6 +18,8 @@
     let currentKey = "";
     let keyboardOctave = 2;
 
+    let ready = false;
+
     function onMIDIMessage(event: Event) {
         const midi_event = event as MIDIMessageEvent;
 
@@ -124,22 +126,26 @@
         filter_env.env.connect(filter.env_cv);
         filter.filter.toDestination();
 
-        console.log(osc.osc)
+        ready = true;
     }
 </script>
 
 
-<button on:click={start}>play</button>
+<div class="container">
+    {#if !ready}
+        <button on:click={start}>PLAY</button>
+    {/if}
 
-<Frame>
-    <Oscillator bind:this={osc} />
-    <Divider />
-    <Envelope bind:this={env} />
-    <Divider />
-    <Filter bind:this={filter} />
-    <Divider />
-    <FilterEnvelope bind:this={filter_env} />
-</Frame>
+    <Frame bind:ready={ready}>
+        <Oscillator bind:this={osc} />
+        <Divider />
+        <Envelope bind:this={env} />
+        <Divider />
+        <Filter bind:this={filter} />
+        <Divider />
+        <FilterEnvelope bind:this={filter_env} />
+    </Frame>
+</div>
 
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
@@ -148,6 +154,38 @@
 <style>
     :global(body) {
         background-color: #27272a;
-        min-height: 100%;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    button {
+        z-index: 10;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        font-size: xx-large;
+        font-weight: bold;
+        color: black;
+        border: 5px solid white;
+        background-color: white;
+        padding: 10px;
+
+        transition: background-color 200ms;
+    }
+
+    button:hover {
+        background-color: transparent;
+        color: white;
     }
 </style>
