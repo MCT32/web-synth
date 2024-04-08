@@ -17,6 +17,7 @@
 
     let currentKey = "";
     let keyboardOctave = 2;
+    let playing = false;
 
     let ready = false;
 
@@ -95,9 +96,10 @@
     }
 
     function play(note: string) {
-        currentKey = note;
+        if (osc.osc && env.env && filter_env.env && !(note == currentKey && playing)) {
+            currentKey = note;
+            playing = true;
 
-        if (osc.osc && env.env && filter_env.env) {
             osc.osc.set({
                 frequency: Tone.Frequency(note).toFrequency()
             });
@@ -108,6 +110,8 @@
 
     function stop(note: string) {
         if (env.env && filter_env.env && currentKey == note) {
+            playing = false;
+
             env.env.triggerRelease();
             filter_env.env.triggerRelease();
         }

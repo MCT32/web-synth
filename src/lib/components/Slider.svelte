@@ -23,7 +23,7 @@
 
 <div class="container">
     <span class="label">{label}</span>
-    <input class="slider" type="range" {...notypecheck({orient: "vertical"})} min={min} max={max} step={step} bind:value={value} on:input={onChange}>
+    <input class="slider" type="range" min={min} max={max} step={step} bind:value={value} on:input={onChange}>
 </div>
 
 
@@ -51,9 +51,19 @@
         height: 200px;
         border-radius: 3px;
         background-color: #facc15;
+        writing-mode: vertical-lr;
+        direction: rtl;
     }
 
     .slider::-moz-range-thumb {
+        width: 20px;
+        height: 10px;
+        border-radius: 3px;
+        background-color: #a1a1aa;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
         width: 20px;
         height: 10px;
         border-radius: 3px;
